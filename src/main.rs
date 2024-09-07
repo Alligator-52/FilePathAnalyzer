@@ -1,18 +1,17 @@
 use std::io::{self, Write};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::fs;
 use colored::*;
 
-
+const MAX_ENTRIES: usize = 10;
 fn main() 
 {
-    //let mut path  = Path::new("");
     loop
     {
         let user_input = get_user_input();
         let path = Path::new(&user_input);
 
-        if !path.is_dir()
+        if !path.exists() || !path.is_dir()
         {
             println!("{}","\nprovided path is not a directory".red());
             continue;
