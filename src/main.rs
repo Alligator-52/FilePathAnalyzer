@@ -19,7 +19,21 @@ fn main()
             continue;
         }
         search_longest_paths_dfs(path, &mut dir_paths);
+        let len = match dir_paths.len()
+        {
+            len if len >= MAX_ENTRIES => MAX_ENTRIES,
+            len => len
+        };
         dir_paths.sort_by_key(|p|Reverse(p.to_str().unwrap_or("").len()));
+
+        println!
+        (
+            "\nSuccessfuilly scanned: {}\nTotal entries found: {}\n{} longest paths:\n",
+            path.to_string_lossy().yellow(),
+            dir_paths.len().to_string().yellow(),
+            len.to_string().yellow()
+        );
+
         for path in dir_paths.iter().take(MAX_ENTRIES)
         {
             println!("{}", path.to_string_lossy().green());
@@ -59,7 +73,7 @@ fn get_user_input() -> String
 
 fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
 {
-    println!("Reading directory: {}", path.to_string_lossy().yellow());
+    println!("Reading directory: {}", path.to_string_lossy().cyan());
     if let Ok(entries) = fs::read_dir(path)
     {
         for entry in entries 
