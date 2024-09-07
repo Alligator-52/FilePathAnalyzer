@@ -1,11 +1,13 @@
 use std::io::{self, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::fs;
+use std::cmp::Reverse;
 use colored::*;
 
 const MAX_ENTRIES: usize = 10;
 fn main() 
 {
+    let mut dir_paths: Vec<PathBuf> = Vec::new();
     loop
     {
         let user_input = get_user_input();
@@ -16,7 +18,12 @@ fn main()
             println!("{}","\nprovided path is not a directory".red());
             continue;
         }
-        println!("\nProvided Directory: {}",&path.to_string_lossy().green());
+        search_longest_paths_dfs(path, &mut dir_paths);
+        dir_paths.sort_by_key(|p|Reverse(p.to_str().unwrap_or("").len()));
+        for path in dir_paths.iter().take(MAX_ENTRIES)
+        {
+            println!("{}", path.to_string_lossy().green());
+        }
         break;
     }
 }
@@ -24,6 +31,7 @@ fn main()
 fn get_user_input() -> String
 {
     let mut input = String::new();
+
     loop
     {
         print!("{}","\nEnter the directory to scan: ".yellow());
@@ -44,6 +52,29 @@ fn get_user_input() -> String
             {
                 println!("Failed to read input");
                 continue;
+            }
+        }
+    }
+}
+
+fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
+{
+    println!("Reading directory: {}", path.to_string_lossy().yellow());
+    if let Ok(entries) = fs::read_dir(path)
+    {
+        for entry in entries 
+        {
+            if let Ok(entry) = entry
+            {
+                let path = entry.path();
+                if path.is_dir()
+                {
+                    search_longest_paths_dfs(&path, dir_paths);
+                }
+                else
+                {
+                    dir_paths.push(path);
+                }
             }
         }
     }
