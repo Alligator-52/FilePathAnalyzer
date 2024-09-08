@@ -17,7 +17,6 @@ fn main() -> io::Result<()>
     let path = Path::new(&args[1]);
     let mut dir_paths: Vec<PathBuf> = Vec::new();
     implement_search(path, &mut dir_paths);
-    wait_for_exit();
     return Ok(());
 }
 
@@ -74,14 +73,6 @@ fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
         }
     }
 }
-
-fn wait_for_exit() 
-{
-    print!("{}", "\nPress Enter to exit...".yellow());
-    io::stdout().flush().unwrap();
-    let _ = io::stdin().read_line(&mut String::new());
-}
-
 
 #[allow(dead_code)]
 fn user_input_method()

@@ -29,11 +29,11 @@ Root: HKCU; Subkey: "Software\PathSearcher"; ValueType: string; ValueName: "Inst
 
 ; Add Right-Click Context Menu Entry for Right-Click on a Folder
 Root: HKCR; Subkey: "Directory\shell\PathSearcher"; ValueType: string; ValueData: "Run Path Analyzer"
-Root: HKCR; Subkey: "Directory\shell\PathSearcher\command"; ValueType: string; ValueData: """cmd.exe"" /C """"{app}\file_path_analyzer.exe"" ""%1"""""
+Root: HKCR; Subkey: "Directory\shell\PathSearcher\command"; ValueType: string; ValueData: """cmd.exe"" /K """"{app}\file_path_analyzer.exe"" ""%1"""""
 
 ; Add Right-Click Context Menu Entry for Right-Click Inside a Directory
 Root: HKCR; Subkey: "Directory\Background\shell\PathSearcher"; ValueType: string; ValueData: "Run Path Analyzer"
-Root: HKCR; Subkey: "Directory\Background\shell\PathSearcher\command"; ValueType: string; ValueData: """cmd.exe"" /C """"{app}\file_path_analyzer.exe"" ""%V"""""
+Root: HKCR; Subkey: "Directory\Background\shell\PathSearcher\command"; ValueType: string; ValueData: """cmd.exe"" /K """"{app}\file_path_analyzer.exe"" ""%V"""""
 
 [Tasks]
 ; No optional tasks (no start menu shortcut or desktop icon)
