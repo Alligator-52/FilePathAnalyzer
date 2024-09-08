@@ -17,22 +17,8 @@ fn main() -> io::Result<()>
     let path = Path::new(&args[1]);
     let mut dir_paths: Vec<PathBuf> = Vec::new();
     implement_search(path, &mut dir_paths);
+    wait_for_exit();
     return Ok(());
-}
-
-#[allow(dead_code)]
-fn user_input_method()
-{
-    let mut dir_paths: Vec<PathBuf> = Vec::new();
-    loop
-    {
-        let user_input = get_user_input();
-        let path = Path::new(&user_input);
-
-        implement_search(path, &mut dir_paths);
-        
-        break;
-    }
 }
 
 fn implement_search(path: &Path, dir_paths: &mut Vec<PathBuf>)
@@ -64,6 +50,53 @@ fn implement_search(path: &Path, dir_paths: &mut Vec<PathBuf>)
     }
 }
 
+
+
+fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
+{
+    println!("Reading directory: {}", path.to_string_lossy().cyan());
+    if let Ok(entries) = fs::read_dir(path)
+    {
+        for entry in entries 
+        {
+            if let Ok(entry) = entry
+            {
+                let path = entry.path();
+                if path.is_dir()
+                {
+                    search_longest_paths_dfs(&path, dir_paths);
+                }
+                else
+                {
+                    dir_paths.push(path);
+                }
+            }
+        }
+    }
+}
+
+fn wait_for_exit() 
+{
+    print!("{}", "\nPress Enter to exit...".yellow());
+    io::stdout().flush().unwrap();
+    let _ = io::stdin().read_line(&mut String::new());
+}
+
+
+#[allow(dead_code)]
+fn user_input_method()
+{
+    let mut dir_paths: Vec<PathBuf> = Vec::new();
+    loop
+    {
+        let user_input = get_user_input();
+        let path = Path::new(&user_input);
+
+        implement_search(path, &mut dir_paths);
+        
+        break;
+    }
+}
 fn get_user_input() -> String
 {
     let mut input = String::new();
@@ -88,29 +121,6 @@ fn get_user_input() -> String
             {
                 println!("Failed to read input");
                 continue;
-            }
-        }
-    }
-}
-
-fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
-{
-    println!("Reading directory: {}", path.to_string_lossy().cyan());
-    if let Ok(entries) = fs::read_dir(path)
-    {
-        for entry in entries 
-        {
-            if let Ok(entry) = entry
-            {
-                let path = entry.path();
-                if path.is_dir()
-                {
-                    search_longest_paths_dfs(&path, dir_paths);
-                }
-                else
-                {
-                    dir_paths.push(path);
-                }
             }
         }
     }
