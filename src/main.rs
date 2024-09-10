@@ -1,12 +1,12 @@
 use std::env;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::fs;
+use std::fs::{self, File, write};
 use std::cmp::Reverse;
 use colored::*;
 
 const MAX_ENTRIES: usize = 10;
-
+const OUTPUT_FILE_NAME: &str = "longest_paths.txt";
 //Todo: Add support for multiple directories
 //Todo: Write the paths down into a separate file inside the same directory
 fn main() -> io::Result<()>
@@ -46,13 +46,35 @@ fn implement_search(path: &Path, dir_paths: &mut Vec<PathBuf>)
         len.to_string().yellow()
     );
 
+    get_output(dir_paths,path);
+}
+
+fn get_output(dir_paths: &mut Vec<PathBuf>, path: &Path)
+{
+    let text_path = path.join(OUTPUT_FILE_NAME);
+    let mut file:Option<File> = None;
+
     for path in dir_paths.iter().take(MAX_ENTRIES)
     {
         println!("{}", path.to_string_lossy().green());
     }
+
+    if !text_path.exists()
+    {
+        file = Some(File::create(&text_path).expect("Failed to create file"));
+        println!("\n File created at: {}", text_path.to_string_lossy().green());    
+    }
+    
+    if let Some(mut file) = file
+    {
+        let mut i = 1;
+        for path in dir_paths.iter().take(MAX_ENTRIES)
+        {
+            writeln!(file, "{}{}",i,path.to_string_lossy()).expect("Failed to write to file");
+            i+=1;
+        }
+    }
 }
-
-
 
 fn search_longest_paths_dfs(path: &Path, dir_paths: &mut Vec<PathBuf>)
 {
