@@ -59,18 +59,19 @@ fn get_output(dir_paths: &mut Vec<PathBuf>, path: &Path)
         println!("{}", path.to_string_lossy().green());
     }
 
-    if !text_path.exists()
-    {
-        file = Some(File::create(&text_path).expect("Failed to create file"));
-        println!("\n File created at: {}", text_path.to_string_lossy().green());    
-    }
+    file = Some(File::create(&text_path).expect("Failed to create file"));
+    // if !text_path.exists()
+    // {
+    //     file = Some(File::create(&text_path).expect("Failed to create file"));
+    //     println!("\n File created at: {}", text_path.to_string_lossy().green());    
+    // }
     
     if let Some(mut file) = file
     {
         let mut i = 1;
         for path in dir_paths.iter().take(MAX_ENTRIES)
         {
-            writeln!(file, "{}{}",i,path.to_string_lossy()).expect("Failed to write to file");
+            writeln!(file, "{}. {}",i,path.to_string_lossy()).expect("Failed to write to file");
             i+=1;
         }
     }
