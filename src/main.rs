@@ -6,6 +6,9 @@ use std::cmp::Reverse;
 use colored::*;
 
 const MAX_ENTRIES: usize = 10;
+
+//Todo: Add support for multiple directories
+//Todo: Write the paths down into a separate file inside the same directory
 fn main() -> io::Result<()>
 {
     
