@@ -1,7 +1,7 @@
 use std::env;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::fs::{self, File, write};
+use std::fs::{self, File};
 use std::cmp::Reverse;
 use colored::*;
 
@@ -52,14 +52,13 @@ fn implement_search(path: &Path, dir_paths: &mut Vec<PathBuf>)
 fn get_output(dir_paths: &mut Vec<PathBuf>, path: &Path)
 {
     let text_path = path.join(OUTPUT_FILE_NAME);
-    let mut file:Option<File> = None;
 
     for path in dir_paths.iter().take(MAX_ENTRIES)
     {
         println!("{}", path.to_string_lossy().green());
     }
 
-    file = Some(File::create(&text_path).expect("Failed to create file"));
+    let file = Some(File::create(&text_path).expect("Failed to create file"));
     // if !text_path.exists()
     // {
     //     file = Some(File::create(&text_path).expect("Failed to create file"));
