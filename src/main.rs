@@ -1,5 +1,5 @@
 use std::env;
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::path::{Path, PathBuf};
 use std::fs::{self, File};
 use std::cmp::Reverse;
@@ -51,19 +51,25 @@ fn implement_search(path: &Path, dir_paths: &mut Vec<PathBuf>)
 
 fn get_output(dir_paths: &mut Vec<PathBuf>, path: &Path)
 {
-    let text_path = path.join(OUTPUT_FILE_NAME);
-
+    
     for path in dir_paths.iter().take(MAX_ENTRIES)
     {
         println!("{}", path.to_string_lossy().green());
     }
+    
+    let mut input = String::new();
+    match io::stdin().read_line(&mut input)
+    {
+        Ok(_) =>{
 
+        }
+        Err(_) =>
+        {
+
+        }    
+    }
+    let text_path = path.join(OUTPUT_FILE_NAME);
     let file = Some(File::create(&text_path).expect("Failed to create file"));
-    // if !text_path.exists()
-    // {
-    //     file = Some(File::create(&text_path).expect("Failed to create file"));
-    //     println!("\n File created at: {}", text_path.to_string_lossy().green());    
-    // }
     
     if let Some(mut file) = file
     {
